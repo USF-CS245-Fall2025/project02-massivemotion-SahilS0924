@@ -26,7 +26,8 @@ public class CelestialBody {
         g.fillOval((int) x, (int) y, size, size);
     }
 
-    public boolean isOffScreen(int width, int height) {
+    public boolean isOffScreen(int width, int height) {//Checks if the body is offscreen
         return (x + size < 0 || y + size < 0 || x > width || y > height);
     }
 }
+
