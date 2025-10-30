@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.Random;
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class MassiveMotion extends JPanel implements ActionListener {
 
@@ -27,8 +28,8 @@ public class MassiveMotion extends JPanel implements ActionListener {
     // public MassiveMotion(String propfile) {
 
         // TODO: insert your code to read from configuration file here.
-public MassiveMotion() {//Constructor
-        loadProperties("MassiveMotion.txt");
+public MassiveMotion(String configFile) {//Constructor
+        loadProperties(configFile);//Fixed: Load properties from config file based on command line input
         tm = new Timer(timerDelay, this);
         // Create the big star
         star = new CelestialBody(starX, starY, starVx, starVy, starSize, Color.YELLOW);
@@ -39,23 +40,23 @@ public MassiveMotion() {//Constructor
         try (InputStream input = new FileInputStream(filename)) {
             props.load(input);
         } catch (IOException e) {
-            System.out.println("Config fail");
+            System.out.println("Config fail: "+filename);
         }
-//Read properties and convert to appropriate types
-        timerDelay = Integer.parseInt(props.getProperty("timer_delay"));
-        windowSizeX = Integer.parseInt(props.getProperty("window_size_x"));
-        windowSizeY = Integer.parseInt(props.getProperty("window_size_y"));
+//Read properties and convert to appropriate types, fixed:gave defauklt values in case the og file is missing them
+        timerDelay = Integer.parseInt(props.getProperty("timer_delay", "75"));
+        windowSizeX = Integer.parseInt(props.getProperty("window_size_x","1024"));
+        windowSizeY = Integer.parseInt(props.getProperty("window_size_y","768"));
 
-        genX = Double.parseDouble(props.getProperty("gen_x"));
-        genY = Double.parseDouble(props.getProperty("gen_y"));
-        bodySize = Integer.parseInt(props.getProperty("body_size"));
-        bodyVelocity = Integer.parseInt(props.getProperty("body_velocity"));
+        genX = Double.parseDouble(props.getProperty("gen_x","0.06"));
+        genY = Double.parseDouble(props.getProperty("gen_y","0.06"));
+        bodySize = Integer.parseInt(props.getProperty("body_size","10"));
+        bodyVelocity = Integer.parseInt(props.getProperty("body_velocity","3"));
 
-        starX = Integer.parseInt(props.getProperty("star_position_x"));
-        starY = Integer.parseInt(props.getProperty("star_position_y"));
-        starSize = Integer.parseInt(props.getProperty("star_size"));
-        starVx = Integer.parseInt(props.getProperty("star_velocity_x"));
-        starVy = Integer.parseInt(props.getProperty("star_velocity_y"));
+        starX = Integer.parseInt(props.getProperty("star_position_x","512"));
+        starY = Integer.parseInt(props.getProperty("star_position_y","384"));
+        starSize = Integer.parseInt(props.getProperty("star_size","30"));
+        starVx = Integer.parseInt(props.getProperty("star_velocity_x","0"));
+        starVy = Integer.parseInt(props.getProperty("star_velocity_y","0"));
 
     }
 
@@ -99,7 +100,7 @@ public MassiveMotion() {//Constructor
    star.move();
 
         // Move all comets
-        for (CelestialBody comet: comets) {
+        for (CelestialBody comet : comets) {
             comet.move();
         }
 
@@ -139,9 +140,7 @@ public MassiveMotion() {//Constructor
 
     public static void main(String[] args) {
         System.out.println("Massive Motion starting...");
-        // MassiveMotion mm = new MassiveMotion(args[0]);
-        MassiveMotion mm = new MassiveMotion();
-
+         MassiveMotion mm = new MassiveMotion(args[0]);//Fixed: takes in command line arg
         JFrame jf = new JFrame();
         jf.setTitle("Massive Motion");
         jf.setSize(mm.windowSizeX, mm.windowSizeY); // TODO: Replace with the size from configuration!
