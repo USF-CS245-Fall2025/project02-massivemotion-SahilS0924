@@ -1,8 +1,17 @@
 public interface List<T> {
 
-    public void add (int index, T element);
-    public boolean add (T element);
-    public T get (int index);
-    public T remove (int index);
-    public int size ();
+    void add(int index, T element) throws IndexOutOfBoundsException, NullPointerException;
+    //invalid index amd null element are errors
+
+    boolean add(T element) throws NullPointerException;
+    //null element not allowed
+
+    T get(int index) throws IndexOutOfBoundsException;
+    //index must be within bounds
+
+    T remove(int index) throws IndexOutOfBoundsException;
+    //index must be valid
+
+    int size();
+    //no need for exceptions
 }
